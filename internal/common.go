@@ -2,9 +2,10 @@ package internal
 
 // 7.12.6 Input from the Device to the Host Data Structure
 // 7.12.6.1 Overview
-type word uint16
-type dword [2]word //uint32
-type qword [4]word //uint64
+type word [2]byte    // uint16
+type dword [4]byte   // uint32
+type qword [8]byte   // uint64
+type dqword [16]byte // uint128
 
 type DevIdentify struct {
 	// part 1 of 19 (p140)
