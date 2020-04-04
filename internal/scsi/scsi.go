@@ -1,6 +1,8 @@
 package scsi
 
 import (
+	"bytes"
+	"encoding/binary"
 	"github.com/sungup/smartgo"
 	"github.com/sungup/smartgo/internal"
 	"github.com/sungup/smartgo/internal/ata"
@@ -47,11 +49,15 @@ func (dev *Device) sendCDB(cdb AtaCDB, resp *[]byte) error {
 }
 
 func (dev *Device) getIdentify() (ata.DevIdentify, error) {
-	identify := ata.DevIdentify{}
+	var identify ata.DevIdentify
 
 	buffer := make([]byte, unsafe.Sizeof(identify))
 
 	if err := dev.sendCDB(makeIdentify(), &buffer); err != nil {
+		return identify, err
+	}
+
+	if err := binary.Read(bytes.NewReader(buffer), binary.BigEndian, &identify); err != nil {
 		return identify, err
 	}
 
