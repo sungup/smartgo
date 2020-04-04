@@ -1,4 +1,4 @@
-package internal
+package ata
 
 import (
 	"github.com/stretchr/testify/assert"

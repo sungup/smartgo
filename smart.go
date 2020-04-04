@@ -1,29 +1,19 @@
 package smartgo
 
-import (
-	"github.com/sungup/smartgo/internal"
-)
-
 /*
 Scan all devices
 */
-func ScanDevice() (map[string]internal.StorageDevice, error) {
-	storage := make([]internal.StorageDevice, 0)
-	var err error
 
-	if storage, err = internal.ScanNVMe(storage); err != nil {
-		return nil, err
-	}
+type DeviceType string
 
-	if storage, err = internal.ScanSATA(storage); err != nil {
-		return nil, err
-	}
+const (
+	NVMe = DeviceType("nvme")
+	SATA = DeviceType("sata")
+)
 
-	for _, device := range storage {
-		if err := device.ScanSMART(); err != nil {
-			return nil, err
-		}
-	}
+type StorageDev interface {
+	Type() DeviceType
+	Device() string
 
-	return storage, nil
+	Close() error
 }
